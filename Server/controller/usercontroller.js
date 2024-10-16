@@ -8,8 +8,6 @@ const signup = async function(req,res){
       res.send({succes:false,message:"user is present already",data:''})
     }
    else{
-    console.log('create user');
-    
     await User.create({
         name:name,
         email:email,
@@ -17,7 +15,6 @@ const signup = async function(req,res){
     })
     res.json("user create succesfully")
    }
-  console.log('after');
    
 }
 module.exports={
