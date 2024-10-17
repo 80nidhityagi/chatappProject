@@ -10,7 +10,7 @@
         <>
         <center>
        <form >
-            <br /><br /><br /><br />
+         <br /><br /><br /><br />
         <input type="text" name="email"  id="" placeholder="Enter your email" /><br /><br />
         <input type="text" name="password"  id="" placeholder="Enter your password" /><br /><br />
         <button type="submit">Login</button>
