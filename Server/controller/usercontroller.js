@@ -1,4 +1,5 @@
 const User = require('../models/User')
+const bcrypt = require('bcrypt');
 const signup = async function(req,res){
    const name = req.body.name;
    const email = req.body.email;
@@ -8,10 +9,14 @@ const signup = async function(req,res){
       res.send({succes:false,message:"user is present already",data:''})
     }
    else{
+    let salt = 10
+    let newpassword =  await bcrypt.hash(password,salt);
+    console.log(newpassword,'newpassword');
+    
     await User.create({
         name:name,
         email:email,
-        password:password
+        password:newpassword
     })
     res.json("user create succesfully")
    }
