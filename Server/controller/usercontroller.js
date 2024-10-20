@@ -26,16 +26,19 @@ const signup = async function(req,res){
 async function login(req,res){
   let email = req.body.email;
   let  password = req.body.password;
-  let user =await User.find({email:email});
-  if(user.email===email&&user.password===password){
-res.send("welcome")    
-    console.log("you are welcome");
-    
+  let user =await User.findOne({email:email});
+  if(!user){
+    res.json({succes:false,message:'username or password is incorrect'})
   }
   else{
-    res.send("not present")
-    console.log("user not present");
-    
+   if( bcrypt.compare(password,user.password)){
+    res.json({succes:true,message:'user is login successfully'})
+   }
+   else{
+
+     res.json({succes:false,message:'username or password is incorrect'})
+   }
+
   }
 
 }
