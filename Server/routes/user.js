@@ -7,4 +7,8 @@ router.post('/signup',(req,res)=>{
     
     usercontroller.signup(req,res)
 })
+router.post('/login',(req,res)=>{
+    
+usercontroller.login(req,res)    ;
+})
 module.exports = router;
