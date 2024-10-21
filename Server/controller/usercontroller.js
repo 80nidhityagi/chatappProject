@@ -28,15 +28,18 @@ async function login(req,res){
   let  password = req.body.password;
   let user =await User.findOne({email:email});
   if(!user){
-    res.json({succes:false,message:'username or password is incorrect'})
+    res.send({succes:false,message:'username or password is incorrect'})
   }
   else{
-   if( bcrypt.compare(password,user.password)){
-    res.json({succes:true,message:'user is login successfully'})
+   if( bcrypt.compare(password,user.password,(res,err)=>{
+    if (err)res.send({succes:false,message:'username or passwrod is not correct'})
+    else
+      res.send({succes:true,message:'user is login successfully'})
+   })){
    }
    else{
 
-     res.json({succes:false,message:'username or password is incorrect'})
+     res.send({succes:false,message:'username or password is incorrect'})
    }
 
   }

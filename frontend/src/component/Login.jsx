@@ -11,21 +11,12 @@ async function fun(){
     password:password
   }
 console.log(values);
-console.log(email,password);
-alert('of')
-
-
-  let result = await axios({
-    
+  let result = await axios({  
     method:'post',
     url:'http://localhost:3000/login',
     data:values
   })
   console.log(result);
-  
-  alert('ok')
-  console.log("antu gagan");
-  
     }
 
 // console.log(formik.values);
@@ -34,14 +25,14 @@ alert('of')
   return(
         <>
         <center>
-       <form onSubmit={fun} >
+       {/* <form onSubmit={fun} > */}
          <br /><br /><br /><br />
         <input type="text" name="email"  onChange={(e)=>{setemail(e.target.value)}} id="" placeholder="Enter your email" /><br /><br />
         <input type="text" name="password"  id="" placeholder="Enter your password" onChange={(e)=>setpassword(e.target.value)} /><br /><br />
-        <button type="submit">Login</button>
+        <button onClick={fun}>Login</button>
         <p>create new account <Link to={'/signup'} >Signup</Link></p>
         <h1><Link to={'/signup'}>click</Link></h1>
-        </form>
+        {/* </form> */}
         </center>
         </>
     )
