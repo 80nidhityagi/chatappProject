@@ -1,5 +1,5 @@
 const User = require('../models/User')
-const bcrypt = require('bcrypt');
+const bycrypt = require('bcrypt')
 const signup = async function(req,res){
    const name = req.body.name;
    const email = req.body.email;
@@ -9,42 +9,40 @@ const signup = async function(req,res){
       res.send({succes:false,message:"user is present already",data:''})
     }
    else{
-    let salt = 10
-    let newpassword =  await bcrypt.hash(password,salt);
-    console.log(newpassword,'newpassword');
+    let saltroud = 10;
+    let newpassword = await bycrypt.hash(password,saltroud)
+    console.log(newpassword);
     
-    await User.create({
+   let user = await User.create({
         name:name,
         email:email,
         password:newpassword
-    })
-    res.json("user create succesfully")
+    })    
+        
+    res.send({succes:true,message:"user created succesfully",data:user,token:token})
    }
    
 }
-
-async function login(req,res){
-  let email = req.body.email;
-  let  password = req.body.password;
-  let user =await User.findOne({email:email});
-  if(!user){
-    res.send({succes:false,message:'username or password is incorrect'})
-  }
-  else{
-   if( bcrypt.compare(password,user.password,(res,err)=>{
-    if (err)res.send({succes:false,message:'username or passwrod is not correct'})
-    else
-      res.send({succes:true,message:'user is login successfully'})
-   })){
-   }
-   else{
-
-     res.send({succes:false,message:'username or password is incorrect'})
-   }
-
-  }
-
+const login = async (req,res)=>{
+  const email = req.body.email;
+  const password = req.body.password;
+  
+  const  user = await User.findOne({email:email})
+     if(!user){
+      res.send({succes:false,message:"email or password is not correct"})
+     }
+     else{
+     bycrypt.compare(password,user.password,(err,result)=>{
+      if(result){            
+          res.send({succes:true,message:"Login succesfully",data:user})
+      }
+      else {        
+        res.send({succes:false,message:"email or password is not correct"})
+      } 
+     })
+     }  
 }
+
 module.exports={
     signup,login
 }
