@@ -26,18 +26,16 @@
           });
           
           
-          if(result.data.succes === false)
-          toast.error('Email or password is not correct', {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            }); 
+          if(result.data.succes === false){
+            alert('username or password is not correct')
+          }
+          
+            
+            else{
+              alert('login successfully')
+            }
       }
+
       })
 // console.log(formik.values);
 // console.log(formik.touched);

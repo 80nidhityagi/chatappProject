@@ -1,5 +1,6 @@
 const User = require('../models/User')
 const bycrypt = require('bcrypt')
+
 const signup = async function(req,res){
    const name = req.body.name;
    const email = req.body.email;
@@ -18,31 +19,45 @@ const signup = async function(req,res){
         email:email,
         password:newpassword
     })    
-        
-    res.send({succes:true,message:"user created succesfully",data:user,token:token})
+      
+    res.send({succes:true,message:"user created succesfully",data:user})
    }
    
 }
 const login = async (req,res)=>{
   const email = req.body.email;
   const password = req.body.password;
-  
-  const  user = await User.findOne({email:email})
+   const  user = await User.findOne({email:email})
      if(!user){
       res.send({succes:false,message:"email or password is not correct"})
      }
      else{
      bycrypt.compare(password,user.password,(err,result)=>{
-      if(result){            
+      if(result){
+                   
           res.send({succes:true,message:"Login succesfully",data:user})
       }
       else {        
         res.send({succes:false,message:"email or password is not correct"})
       } 
      })
-     }  
+    
+    
+  
+      
+     }
+     
+     
 }
-
+const allUser = async(req,res)=>{
+   let users = await User.find({})
+   res.json({succes:true,message:"all users",data:users})
+   
+}
+const chat = async(req,res)=>{
+    
+    
+}
 module.exports={
-    signup,login
+    signup,login,allUser,chat
 }
