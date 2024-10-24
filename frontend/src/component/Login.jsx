@@ -5,12 +5,14 @@
   import { ToastContainer } from "react-toastify"
   import axios from "axios"
   import { useEffect } from "react"
-  import { useNavigate } from "react-router-dom"
+  import Home from "./Home"
   export default function Login(){
     const nav = useNavigate();
 
     useEffect(()=>{
       if(localStorage.getItem('token')!=null){
+        console.log(token);
+        
         nav('/Home')
 
       }
