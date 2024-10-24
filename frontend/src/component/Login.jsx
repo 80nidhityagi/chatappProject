@@ -33,6 +33,8 @@
             
             else{
               alert('login successfully')
+              console.log(result.data.token,'token');
+              
             }
       }
 

@@ -1,6 +1,6 @@
 const User = require('../models/User')
 const bycrypt = require('bcrypt')
-
+const jwt = require('jsonwebtoken')
 const signup = async function(req,res){
    const name = req.body.name;
    const email = req.body.email;
@@ -34,8 +34,8 @@ const login = async (req,res)=>{
      else{
      bycrypt.compare(password,user.password,(err,result)=>{
       if(result){
-                   
-          res.send({succes:true,message:"Login succesfully",data:user})
+          let token = jwt.sign({email},"nidhityagi")
+          res.send({succes:true,message:"Login succesfully",data:user,token:token})
       }
       else {        
         res.send({succes:false,message:"email or password is not correct"})
