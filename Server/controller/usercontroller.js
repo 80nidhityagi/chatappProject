@@ -19,7 +19,8 @@ const signup = async function(req,res){
         name:name,
         email:email,
         password:newpassword
-    })      
+    })       
+    let token = jwt.sign({email},"nidhityagi",{ expiresIn:'5m'})
     res.send({succes:true,message:"user created succesfully",data:user,token:token})
    }
    

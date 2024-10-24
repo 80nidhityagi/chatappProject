@@ -4,7 +4,18 @@
   import { toast } from "react-toastify"
   import { ToastContainer } from "react-toastify"
   import axios from "axios"
+  import { useEffect } from "react"
+  import { useNavigate } from "react-router-dom"
   export default function Login(){
+    const nav = useNavigate();
+
+    useEffect(()=>{
+      if(localStorage.getItem('token')!=null){
+        nav('/Home')
+
+      }
+
+    },[])
     
     const formik = useFormik({
       initialValues: {
