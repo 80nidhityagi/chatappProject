@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './Home.css'; // Add styles in a CSS file for layout and design
-import { FaUser, FaUsers, FaSearch, FaPlus, FaEye } from 'react-icons/fa'; // Add FaEye icon for "View All Users"
+import './Home.css';
+import { FaUserCircle, FaUsers, FaSearch, FaUser } from 'react-icons/fa'; // FaUsers for "View All Users"
 
 const Home = () => {
     // Sample data for chat users
@@ -28,12 +28,15 @@ const Home = () => {
         <div className="home-container">
             {/* Sidebar */}
             <div className="sidebar">
-                <div className="sidebar-header">
-                    <h2>Chats</h2>
-                    <button className="add-group-btn">
-                        <FaPlus /> Add Group
-                    </button>
+                {/* Profile Icon */}
+                <div className="icon-section">
+                    {/* Profile DP */}
+                    <FaUserCircle className="profile-icon" title="Your Profile" />
+                    
+                    {/* Icon to View All Users */}
+                    <FaUsers className="view-all-icon" onClick={handleViewAllUsers} title="View All Users" />
                 </div>
+
                 {/* Search Bar */}
                 <div className="search-bar">
                     <FaSearch className="search-icon" />
@@ -43,8 +46,8 @@ const Home = () => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    <FaEye className="view-all-icon" onClick={handleViewAllUsers} title="View All Users" />
                 </div>
+
                 {/* User List */}
                 <div className="user-list">
                     {filteredUsers.map(user => (
