@@ -1,0 +1,86 @@
+.home-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 25%;
+    background-color: #f4f4f4;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-group-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.add-group-btn .FaPlus {
+    margin-right: 5px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    padding: 5px;
+    width: 100%;
+}
+
+.search-icon {
+    margin-right: 10px;
+}
+
+.view-all-icon {
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.user-list {
+    margin-top: 10px;
+}
+
+.user-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.user-item:hover {
+    background-color: #ddd;
+}
+
+.user-icon {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+/* Right Dashboard */
+.right-dashboard {
+    width: 75%;
+    padding: 20px;
+    background-color: #fff;
+}
