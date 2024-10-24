@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Home.css';
-import { FaUserCircle, FaUsers, FaSearch, FaUser } from 'react-icons/fa'; // FaUsers for "View All Users"
+import { FaUserCircle, FaUsers, FaSearch, FaUserPlus, FaUser } from 'react-icons/fa'; // FaUserPlus for "Add User"
 
 const Home = () => {
     // Sample data for chat users
@@ -28,13 +28,16 @@ const Home = () => {
         <div className="home-container">
             {/* Sidebar */}
             <div className="sidebar">
-                {/* Profile Icon */}
+                {/* Icons Section */}
                 <div className="icon-section">
-                    {/* Profile DP */}
+                    {/* Profile Icon */}
                     <FaUserCircle className="profile-icon" title="Your Profile" />
-                    
-                    {/* Icon to View All Users */}
+
+                    {/* View All Users Icon */}
                     <FaUsers className="view-all-icon" onClick={handleViewAllUsers} title="View All Users" />
+
+                    {/* Add User Icon */}
+                    <FaUserPlus className="add-user-icon" title="Add User" />
                 </div>
 
                 {/* Search Bar */}
