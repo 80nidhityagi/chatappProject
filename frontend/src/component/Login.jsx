@@ -45,7 +45,12 @@
           
             
             else{
-              alert('login successfully')
+
+              // alert('login successfully')
+              if(localStorage.getItem('token'==null)){
+                localStorage.setItem(result.data.token)
+              }
+            nav('/Home')
               console.log(result.data.token,'token');
               
             }
