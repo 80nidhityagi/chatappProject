@@ -1,6 +1,7 @@
 const User = require('../models/User')
 const bycrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+
 const signup = async function(req,res){
    const name = req.body.name;
    const email = req.body.email;
@@ -18,9 +19,8 @@ const signup = async function(req,res){
         name:name,
         email:email,
         password:newpassword
-    })    
-      
-    res.send({succes:true,message:"user created succesfully",data:user})
+    })      
+    res.send({succes:true,message:"user created succesfully",data:user,token:token})
    }
    
 }
@@ -34,7 +34,11 @@ const login = async (req,res)=>{
      else{
      bycrypt.compare(password,user.password,(err,result)=>{
       if(result){
-          let token = jwt.sign({email},"nidhityagi")
+        const token = jwt.sign({ id: user._id.toString(), username: user.username }, "nidhi tyagi", {
+          expiresIn: '5m' // Token expires in 5 min
+        
+          
+          });            
           res.send({succes:true,message:"Login succesfully",data:user,token:token})
       }
       else {        
@@ -49,15 +53,7 @@ const login = async (req,res)=>{
      
      
 }
-const allUser = async(req,res)=>{
-   let users = await User.find({})
-   res.json({succes:true,message:"all users",data:users})
-   
-}
-const chat = async(req,res)=>{
-    
-    
-}
+
 module.exports={
-    signup,login,allUser,chat
+    signup,login
 }
