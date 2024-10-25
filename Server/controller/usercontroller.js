@@ -55,6 +55,44 @@ const login = async (req,res)=>{
      
 }
 
+
+// Middleware to verify the token
+const SECRET_KEY = 'nidhi tyagi';
+
+// Middleware to verify the token
+const verifyToken = (req, res, next) => {
+    const token = req.headers['authorization'];
+
+    if (!token) {
+        return res.status(401).json({ message: 'Access Denied: No Token Provided!' });
+    }
+
+    jwt.verify(token, SECRET_KEY, (err, decoded) => {
+        if (err) {
+            // Check if the error is due to token expiration
+            if (err.name === 'TokenExpiredError') {
+                // Redirect or handle expired token case
+                return res.status(401).json({ message: 'Session expired, please log in again' });
+            }
+            // Handle other errors
+            return res.status(401).json({ message: 'Invalid Token' });
+        }
+        // Token is valid, add user info from decoded token to the request object
+        req.user = decoded;
+        next();
+    });
+};
+
+// Example protected route
+
+async function allUsers(req,res){
+  let users = await User.find({});
+  res.send({succes:true,message:'all users sent',users:users})
+}
+
+
+
+
 module.exports={
-    signup,login
+    signup,login,verifyToken,allUsers
 }

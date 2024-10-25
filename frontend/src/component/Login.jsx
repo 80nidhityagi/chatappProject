@@ -10,11 +10,31 @@
     const nav = useNavigate();
 
     useEffect(()=>{
-      if(localStorage.getItem('token')!=null){
+      async function fd(){
         
-        nav('/Home')
+        if(localStorage.getItem('token')!=null){
+        console.log(localStorage.getItem('token'));
+        let result = await axios({
+          url:'http://localhost:3000/profile',
+          method:'get',
+          headers: {
+            'Authorization': localStorage.getItem('token'),  // Attach the token here
+        },
+          
+
+        })
+        console.log(result,'result');
+        if(result.data.user!=null){
+          nav('/Home')
+        }
+        else{
+          nav('/Login')
+        }
+       
+      }
 
       }
+      fd();
 
     },[])
     
@@ -51,7 +71,7 @@
                 
                 localStorage.setItem('token',result.data.token)
               }
-              
+              nav('/Home')
             }
       }
 
