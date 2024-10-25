@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Home.css';
 import { FaUserCircle, FaUsers, FaSearch, FaUserPlus, FaUser } from 'react-icons/fa'; // FaUserPlus for "Add User"
+import { FaSignOutAlt } from 'react-icons/fa'; // Importing the logout icon
 
 const Home = () => {
     // Sample data for chat users
@@ -35,9 +36,12 @@ const Home = () => {
 
                     {/* View All Users Icon */}
                     <FaUsers className="view-all-icon" onClick={handleViewAllUsers} title="View All Users" />
-
+                     
                     {/* Add User Icon */}
                     <FaUserPlus className="add-user-icon" title="Add User" />
+                    <button  className="logout-btn">
+      <FaSignOutAlt /> 
+    </button>
                 </div>
 
                 {/* Search Bar */}

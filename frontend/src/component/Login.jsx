@@ -11,7 +11,6 @@
 
     useEffect(()=>{
       if(localStorage.getItem('token')!=null){
-        console.log(token);
         
         nav('/Home')
 
@@ -45,13 +44,13 @@
           
             
             else{
-
+         
               // alert('login successfully')
-              if(localStorage.getItem('token'==null)){
-                localStorage.setItem(result.data.token)
+            let  loaclstoragetoken = localStorage.getItem('token')
+              if(loaclstoragetoken == null){
+                
+                localStorage.setItem('token',result.data.token)
               }
-            nav('/Home')
-              console.log(result.data.token,'token');
               
             }
       }

@@ -83,3 +83,17 @@
     padding: 20px;
     background-color: #fff;
 }
+.logout-btn {
+    background-color: transparent;
+    border: none;
+    color: #0a4b6f;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .logout-btn svg {
+    margin-right: 8px; /* Space between the icon and text */
+    font-size: 20px;
+  }
