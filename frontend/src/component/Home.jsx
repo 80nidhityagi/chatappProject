@@ -8,6 +8,10 @@ import Login from './Login';
 
 const Home = () => {
     let nav = useNavigate();
+    function fun(){
+          nav('/')
+        // alert('on cllick pr fun call hua')
+    }
     // Sample data for chat users
     const [users] = useState([
         { id: 1, name: 'John Doe' },
@@ -21,10 +25,8 @@ const Home = () => {
     let [user,setuser]= useState([])
 
     function logout(){
-        if(localStorage.getItem('token'!=null)){
-            localStorage.clear();
+        localStorage.removeItem("token")
 
-        }
         alert('you are logged out')
         nav('/Login')
     
@@ -87,7 +89,7 @@ const Home = () => {
                     {filteredUsers.map(user => (
                         <div key={user.id} className="user-item">
                             <FaUser className="user-icon" />
-                            <span>{user.name}</span>
+                            <span onClick={fun}>{user.name}</span>
                         </div>
                     ))}
                 </div>
@@ -110,7 +112,7 @@ const Home = () => {
 
 
 
-<table style={{ width: '20%', borderCollapse: 'collapse' }}>
+<table style={{ width: '20%' }}>
       <thead>
         <tr>
           {/* <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2' }}>Name</th> */}
@@ -119,7 +121,7 @@ const Home = () => {
       <tbody>
         {user.map((user, index) => (
           <tr key={index} style={{ backgroundColor: 'silver' }}>
-            <td style={{ border: '1px solid #ddd', padding: '8px', color: 'black' }}>{user.name}</td>
+            <td  onClick={fun} style={{ border: '1px solid #ddd', padding: '8px', color: 'black',cursor: 'pointer' }}>{user.name}</td>
           </tr>
         ))}
       </tbody>
