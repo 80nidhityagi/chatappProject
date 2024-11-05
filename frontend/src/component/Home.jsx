@@ -3,13 +3,13 @@ import './Home.css';
 import { FaUserCircle, FaUsers, FaSearch, FaUserPlus, FaUser } from 'react-icons/fa'; // FaUserPlus for "Add User"
 import { FaSignOutAlt } from 'react-icons/fa'; // Importing the logout icon
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import Login from './Login';
+import { Outlet, useNavigate } from 'react-router-dom';
+import Users from './Users';
 
 const Home = () => {
     let nav = useNavigate();
-    function fun(){
-          nav('/')
+    function fun() {
+        nav('/')
         // alert('on cllick pr fun call hua')
     }
     // Sample data for chat users
@@ -22,15 +22,15 @@ const Home = () => {
 
     // State for search input
     let [searchTerm, setSearchTerm] = useState('');
-    let [user,setuser]= useState([])
+    // let [user,setuser]= useState([])
 
-    function logout(){
+    function logout() {
         localStorage.removeItem("token")
 
         alert('you are logged out')
         nav('/Login')
-    
-        
+
+
     }
 
     // Filter users based on search input
@@ -39,20 +39,7 @@ const Home = () => {
     );
 
     // Reset search term to show all users
-    const handleViewAllUsers = async() => {
-        console.log("inside handleview");
-        
-        let result = await axios({
-            url:'http://localhost:3000/allUsers',
-            method:'get'
 
-        })
-        user = result.data.users;
-        // alert(user)
-        console.log((user));
-        
-        setuser(user); // Reset search input
-    };
 
     return (
         <div className="home-container">
@@ -64,13 +51,13 @@ const Home = () => {
                     <FaUserCircle className="profile-icon" title="Your Profile" />
 
                     {/* View All Users Icon */}
-                    <FaUsers className="view-all-icon" onClick={handleViewAllUsers} title="View All Users" />
-                     
+                    <FaUsers className="view-all-icon" onClick={() => { nav('/Home/getusers')}} title="View All Users" />
+
                     {/* Add User Icon */}
                     <FaUserPlus className="add-user-icon" title="Add User" />
-                    <button  className="logout-btn" onClick={logout}>
-      <FaSignOutAlt /> 
-    </button>
+                    <button className="logout-btn" onClick={logout}>
+                        <FaSignOutAlt />
+                    </button>
                 </div>
 
                 {/* Search Bar */}
@@ -89,7 +76,7 @@ const Home = () => {
                     {filteredUsers.map(user => (
                         <div key={user.id} className="user-item">
                             <FaUser className="user-icon" />
-                            <span onClick={fun}>{user.name}</span>
+                            <span >{user.name}</span>
                         </div>
                     ))}
                 </div>
@@ -97,44 +84,24 @@ const Home = () => {
 
             {/* Right Dashboard */}
             <div className="right-dashboard">
-                <h1>Dashboard</h1>
-                <p>Welcome to the chat dashboard!</p>
-               {/* <div>{user}</div> */}
+                {/* <h1>Dashboard</h1>
+                <p>Welcome to the chat dashboard!</p> */}
+                {/* <div>{user}</div> */}
+                {/* <Users/> */}
 
 
 
 
 
 
-               {/* <div>{user.map((u,i)=>
+                {/* <div>{user.map((u,i)=>
             <h4 key={i}>{u.name}</h4>
             )}</div> */}
 
 
 
-<table style={{ width: '20%' }}>
-      <thead>
-        <tr>
-          {/* <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2' }}>Name</th> */}
-        </tr>
-      </thead>
-      <tbody>
-        {user.map((user, index) => (
-          <tr key={index} style={{ backgroundColor: 'silver' }}>
-            <td  onClick={fun} style={{ border: '1px solid #ddd', padding: '8px', color: 'black',cursor: 'pointer' }}>{user.name}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
 
-
-
-
-
-
-
-
-
+                <Outlet />
             </div>
         </div>
     );

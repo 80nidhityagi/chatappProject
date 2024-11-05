@@ -1,6 +1,11 @@
 const User = require('../models/User')
+const Chat = require('../models/chat')
 const bycrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+// import { jwtDecode } from 'jwt-decode';
+const jwt_decode = require('jwt-decode');
+// import jwt_decode from 'jwt-decode';
+
 
 const signup = async function(req,res){
    const name = req.body.name;
@@ -90,9 +95,30 @@ async function allUsers(req,res){
   res.send({succes:true,message:'all users sent',users:users})
 }
 
+async function chatsave(req,res){
+  console.log(req.body);
+  
 
+  console.log("***************");
+  console.log("***************");
+  console.log("***************");
+  console.log("***************");
+  console.log("***************");
+  let u = await Chat.create({
+    chat:[
+    '596ujgjkkf',
+'596jjkjgkjhggggg']
+
+  })
+  // let u = jwt_decode(req.body.sender);
+  // console.log(req.body.sender);
+  // console.log(u);
+  
+  
+
+}
 
 
 module.exports={
-    signup,login,verifyToken,allUsers
+    signup,login,verifyToken,allUsers,chatsave
 }

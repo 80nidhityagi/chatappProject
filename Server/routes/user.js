@@ -59,4 +59,8 @@ router.get('/allUsers',(req,res)=>{
     usercontroller.allUsers(req,res);
 })
 
+router.post('/chat',(req,res)=>{
+    usercontroller.chatsave(req,res);
+})
+
 module.exports = router;
