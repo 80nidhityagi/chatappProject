@@ -79,19 +79,6 @@ function Users() {
     fun();
   },[])
 
-
-  //  async const result = ()=>await axios({
-  //     url: 'http://localhost:3000/allUsers',
-  //     method: 'get',
-
-  //   })
-  //   if (result) {
-  //     setuser(result);
-  //   }
-  //   else {
-  //     alert('some issue');
-  //   }
-  // }
   return (
     <>
 

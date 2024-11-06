@@ -2,24 +2,31 @@
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { decode } from 'jwt-decode';
+// import { decode } from 'jwt-decode';
 
 function Other() {
   // Access the user parameter from the URL
   const { user } = useParams();
+   const userData = localStorage.getItem('token')
+
   console.log(user);
   useEffect(()=>{
     
    async function fun(){
-    const token = localStorage.getItem('token'); // assuming the token is stored with key 'token'
-    console.log(token,'token');
+    alert('ok')
     
-    const decoded =  await decode(token);
-
-
-    console.log("**********");
-    console.log(decoded);
-    
+    const config = {
+                  headers: {
+                    Authorization: `Bearer ${userData}`,
+                  },
+                };
+     console.log("*****************");
+     console.log("*****************");
+     console.log("*****************");
+     console.log("*****************");
+     console.log(config,'config h bhai');
+     
+     
     
     // let obj = {sender:jwt_decode(localStorage.getItem('token')),receiver:user}
     const result = await axios({
