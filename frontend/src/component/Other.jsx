@@ -2,7 +2,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import axios from 'axios';
-// import jwt_decode from 'jwt-decode';
+import { decode } from 'jwt-decode';
 
 function Other() {
   // Access the user parameter from the URL
@@ -11,8 +11,16 @@ function Other() {
   useEffect(()=>{
     
    async function fun(){
-    // let s = localStorage.getItem('token')
-    // jwt_decode(s)
+    const token = localStorage.getItem('token'); // assuming the token is stored with key 'token'
+    console.log(token,'token');
+    
+    const decoded =  await decode(token);
+
+
+    console.log("**********");
+    console.log(decoded);
+    
+    
     // let obj = {sender:jwt_decode(localStorage.getItem('token')),receiver:user}
     const result = await axios({
         url:'http://localhost:3000/chat',
