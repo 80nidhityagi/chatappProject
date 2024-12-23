@@ -55,6 +55,26 @@ import { useNavigate } from "react-router-dom";
 function Users() {
   const nav = useNavigate();
   let [user, setuser] = useState([]);
+
+ async function getUserChat(id,name){
+
+  //jo kisi user ke naam pr click krke ye getuserchat function chala hai chat page kholne se phele hum ye chat model mai jake save krenge ki kisse bat krne ke liye click kiya hai jisse jo home page pr search bar se niche show ho ske (serch bar se niche vo users aayenge jinse hum jayada tr baat krte hai) 
+
+  let obj = {sender:localStorage.getItem('userId'),receiver:id}
+
+ let res =  await axios({
+    url:'http://localhost:3000/saveSimpleChat',
+    method:'post',
+    data:obj
+
+  })
+const sender_id = obj.sender;
+// const receiver_id = obj.receiver;
+
+    // nav(`/Home/Chat/${sender_id}/${res.data.data}/${name}`);
+    nav('/Home')
+
+  }
   useEffect(()=>{ async function fun(){
 
       const data = await axios({
@@ -91,7 +111,7 @@ function Users() {
       <tbody>
         {user.map((user, index) => (
           <tr key={index} style={{ backgroundColor: 'silver' }}>
-            <td  onClick={()=>{nav('/home/Other/'+user.name)}} style={{ border: '1px solid #ddd', padding: '8px', color: 'black',cursor: 'pointer' }}>{user.name}</td>
+            <td  onClick={()=>getUserChat(user._id,user.name)} style={{ border: '1px solid #ddd', padding: '8px', color: 'black',cursor: 'pointer' }}>{user.name}</td>
           </tr>
         ))}
       </tbody>

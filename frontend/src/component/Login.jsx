@@ -1,99 +1,112 @@
-  import { Link, useNavigate } from "react-router-dom"
-  import {useFormik}  from 'formik'
-  import * as Yup from 'yup'
-  import { toast } from "react-toastify"
-  import { ToastContainer } from "react-toastify"
-  import axios from "axios"
-  import { useEffect } from "react"
-  import Home from "./Home"
-  export default function Login(){
-    const nav = useNavigate();
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import "./Login.css"; // Assuming you're adding a separate CSS file
 
-    useEffect(()=>{
-      async function fd(){
-        
-        if(localStorage.getItem('token')!=null){
-        console.log(localStorage.getItem('token'));
-        let result = await axios({
-          url:'http://localhost:3000/profile',
-          method:'get',
-          headers: {
-            'Authorization': localStorage.getItem('token'),  // Attach the token here
-        },
-          
+export default function Login() {
+  const navigate = useNavigate();
 
-        })
-        console.log(result,'result');
-        if(result.data.user!=null){
-          nav('/Home')
-        }
-        else{
-          nav('/Login')
-        }
-       
-      }
-
-      }
-      fd();
-
-    },[])
-    
-    const formik = useFormik({
-      initialValues: {
-        email: "",
-        password: ""
-        
-      },
-      validationSchema: Yup.object({
-          email: Yup.string().email("email must be valid").required("email is required field")
-          ,
-          password: Yup.string().max(8, "password must be maximum 8 character").min(6, "minumum 6 characters").required("password is required field")
-      })
-      , onSubmit: async(values) =>{
-
-      let result = await axios({
-          method:'post',
-          url:'http://localhost:3000/login',
-          data:values
+  useEffect(() => {
+    async function checkToken() {
+      if (localStorage.getItem("token")) {
+        try {
+          const result = await axios.get("http://localhost:3000/user/profile", {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
           });
-          
-          
-          if(result.data.succes === false){
-            alert('username or password is not correct')
+          if (result.data.user) {
+            navigate("/Home");
+          } else {
+            navigate("/Login");
           }
-          
-            
-            else{
-         
-              // alert('login successfully')
-            let  loaclstoragetoken = localStorage.getItem('token')
-              if(loaclstoragetoken == null){
-                
-                localStorage.setItem('token',result.data.token)
-              }
-              nav('/Home')
-            }
+        } catch (error) {
+          console.error("Error validating token", error);
+        }
       }
+    }
+    checkToken();
+  }, [navigate]);
 
-      })
-// console.log(formik.values);
-// console.log(formik.touched);
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .email("Email must be valid")
+        .required("Email is a required field"),
+      password: Yup.string()
+        .min(6, "Minimum 6 characters")
+        .max(8, "Password must be maximum 8 characters")
+        .required("Password is a required field"),
+    }),
+    onSubmit: async (values) => {
+      try {
+        const result = await axios.post("http://localhost:3000/login", values);
 
-  return(
-        <>
-        <center>
-       <form onSubmit={formik.handleSubmit}>
-            <br /><br /><br /><br />
-        <input type="text" name="email"  id="" placeholder="Enter your email" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.email} /><br /><br />
-        {formik.touched.email && formik.errors.email && <p style={{ color: "red" }}>{formik.errors.email}</p>} <br /><br />
-        <input type="text" name="password"  id="" placeholder="Enter your password"  onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password}/><br /><br />
-        { formik.touched.password && formik.errors.password && <p style={{color:"red"}}>{formik.errors.password}</p>}<br /><br />
+        if (result.data.succes===false) {
+          toast.error("Username or password is incorrect");
+        } else {
+          if (!localStorage.getItem("token")) {
+            localStorage.setItem("userId", result.data.data._id);
+            localStorage.setItem("token", result.data.token);
+          }
+          toast.success("Login successful!");
+          navigate("/Home");
+        }
+      } catch (error) {
+        toast.error("An error occurred during login");
+        console.error("Login error", error);
+      }
+    },
+  });
+
+  return (
+    <div className="login-container">
+      <ToastContainer />
+      <form className="login-form" onSubmit={formik.handleSubmit}>
+        <h2>Login</h2>
+
+        <input
+          type="text"
+          name="email"
+          placeholder="Enter your email"
+          className={formik.errors.email && formik.touched.email ? "error" : ""}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.email}
+        />
+        {formik.touched.email && formik.errors.email && (
+          <p className="error-message">{formik.errors.email}</p>
+        )}
+
+        <input
+          type="password"
+          name="password"
+          placeholder="Enter your password"
+          className={
+            formik.errors.password && formik.touched.password ? "error" : ""
+          }
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.password}
+        />
+        {formik.touched.password && formik.errors.password && (
+          <p className="error-message">{formik.errors.password}</p>
+        )}
+
         <button type="submit">Login</button>
-        <ToastContainer />
-        <p>create new account <Link to={'/signup'} >Signup</Link></p>
-        </form>
-        </center>
-        </>
-    )
+
+        <p>
+          Create a new account <Link to="/signup">Signup</Link>
+        </p>
+      </form>
+    </div>
+  );
 }
-  

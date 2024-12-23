@@ -1,50 +1,127 @@
 import { useFormik } from "formik";
-import * as Yup from 'yup'
-import axios from 'axios'
+import * as Yup from 'yup';
+import axios from 'axios';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Signup.css"; // Import the CSS file for styling
+
 export default function Signup() {
+    const nav = useNavigate();
+    const [errorMessage,setErrorMessage] = useState('');
+
     const formik = useFormik({
         initialValues: {
             name: "",
             email: "",
-            password: ""
+            password: "",
+            image: null,
         },
         validationSchema: Yup.object({
-            name: Yup.string().max(20, "name must be less then or equal to 20 character").required("name is required"),
-            email: Yup.string().email("email must be valid").required("email is required field")
-            ,
-            password: Yup.string().max(8, "password must be maximum 8 character").min(6, "minumum 6 characters").required("password is required field")
-        })
-        , onSubmit: async (values) => {
+            name: Yup.string()
+                .max(20, "Name must be less than or equal to 20 characters")
+                .required("Name is required"),
+            email: Yup.string()
+                .email("Email must be valid")
+                .required("Email is required"),
+            password: Yup.string()
+                .max(8, "Password must be a maximum of 8 characters")
+                .min(6, "Minimum 6 characters")
+                .required("Password is required"),
+        }),
 
-            let result = await axios({
-                method: 'post',
-                url: 'http://localhost:3000/signup',
-                data: values
-            })
-            console.log(result);
-            console.log("hello hey");
-            
+        onSubmit: async (values) => {
+            const formData = new FormData();
+            formData.append("name", values.name);
+            formData.append("email", values.email);
+            formData.append("password", values.password);
+            formData.append("image", values.image);
 
-        }
-    })
+            try {
+                const result = await axios.post("http://localhost:3000/signup", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+                
+                console.log(result);
+                if (result.data.succes) {
+                    nav("/");
+                }
+                else{
+                    setErrorMessage(result.data.message)
+                }
+            } catch (error) {
+                console.error("Error during signup:", error);
+            }
+        },
+    });
+
     return (
-        <>
-            <center>
-                <form onSubmit={formik.handleSubmit} >
+        <div className="signup-container">
+            <h2>Sign Up</h2>
+            <form onSubmit={formik.handleSubmit} className="signup-form">
+                <div className="form-group">
+                    <label htmlFor="name">Name</label>
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Enter your name"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.name}
+                    />
+                    {formik.touched.name && formik.errors.name && (
+                        <p className="error">{formik.errors.name}</p>
+                    )}
+                </div>
 
+                <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.email}
+                    />
+                    {formik.touched.email && formik.errors.email && (
+                        <p className="error">{formik.errors.email}</p>
+                    )}
+                </div>
 
-                    <br /><br /><br /><br />
-                    <input type="text" name="name" id="" placeholder="Enter your name" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.name} /><br /><br />
-                    {formik.touched.name && formik.errors.name && <p style={{ color: "red" }}>{formik.errors.name}</p>}
+                <div className="form-group">
+                    <label htmlFor="password">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.password}
+                    />
+                    {formik.touched.password && formik.errors.password && (
+                        <p className="error">{formik.errors.password}</p>
+                    )}
+                </div>
 
-                    <input type="text" name="email" id="" placeholder="Enter your email" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.email} /><br /><br />
-                    {formik.touched.email && formik.errors.email && <p style={{ color: "red" }}>{formik.errors.email}</p>}
+                <div className="form-group">
+                    <label htmlFor="image">Profile Photo</label>
+                    <input
+                        type="file"
+                        name="image"
+                        onChange={(event) => {
+                            formik.setFieldValue("image", event.currentTarget.files[0]);
+                            console.log(event.currentTarget.files[0]);
+                            
+                        }}
+                    />
+                </div>
 
-                    <input type="text" name="password" id="" placeholder="Enter your password" onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password} /><br /><br />
-                    {formik.touched.password && formik.errors.password && <p style={{ color: "red" }}>{formik.errors.password}</p>}
-                    <button type="submit">Signup</button>
-                </form>
-            </center>
-        </>
-    )
+                <button type="submit" className="signup-button">Sign Up</button>
+            </form>
+            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+
+        </div>
+    );
 }
