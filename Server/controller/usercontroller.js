@@ -80,7 +80,7 @@ const login = async (req, res) => {
     
     bycrypt.compare(password, user.password, (err, result) => {
       if (result) {
-        const token = jwt.sign({ id: user._id.toString(), username: user.username }, process.env.SECRET_KEY, {
+        const token = jwt.sign({ email:user.email }, process.env.SECRET_KEY, {
           expiresIn: '5m' // Token expires in 5 min
 
 

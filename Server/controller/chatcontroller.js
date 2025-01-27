@@ -1,74 +1,3 @@
-// const User = require('../models/User')
-// const  Chat = require('../models/Chat')
-
-// async function getChatValeUser(req, res) {
-//     const userid = req.params.userid;
-//     console.log("inside get chat vale ussesr");
-
-//          let chats = await Chat.find({ user:userid}).populate('user','name');
-
-//        let  chatusers = [];
-         
-//          chats.forEach(element => {
-            
-            
-//              console.log(element.user[0]);
-//             //  console.log(element.user[1].name);
-//              chatusers.push(element.user[0]);
-//              chatusers.push(element.user[1]);
-            
-//          });
-         
-         
-         
-//     res.send({succes:true,data:chatusers})
-
-// }
-// async function saveChatUser(req, res) {
-//     let sender_id = req.body.sender;
-//     let receiver_id = req.body.receiver;
-//      let data = await Chat.findOne({
-//         isgroupChat:false,
-//         user:{$all: [sender_id,receiver_id]}
-//     });
-//     console.log(data,'data hai ye');
-    
-//     if(!data){
-//     let obj = {
-//         isgroupChat: false,
-//         user: [sender_id, receiver_id],
-
-//     }
-//     await Chat.create(obj);
-// }
-//     res.send({ succes: true, message: 'userchat' })
-// }
-
-
-// async function saveGroupChatUser(req,res){
-//     let groupName = req.body.groupName;
-//     let users = req.body.users;
-
-//     let data = {
-//         isgroupChat:true,
-//         users,
-        
-//         groupName:groupName
-
-//     }
-//     await Chat.create(data);
-
-
-
-
-
-// }
-
-// module.exports = {
-
-//     getChatValeUser,saveChatUser,saveGroupChatUser
-// }
-
 
 
 
@@ -104,7 +33,6 @@ async function getChatValeUser(req, res) {
             }
         });
 
-        // console.log('chatuser array',chatusers);
         
 
         res.send({ success: true, data: chatusers });
@@ -120,9 +48,7 @@ async function saveSimpleChat(req, res) {
     let sender_id = req.body.sender;
     let receiver_id = req.body.receiver;
 
-    // Ensure consistent order of users
     let sortedUsers = [sender_id, receiver_id].sort();
-    // console.log('Sorted Users:', sortedUsers);
 
 
     // Find the chat object with the sorted user array
@@ -130,10 +56,8 @@ async function saveSimpleChat(req, res) {
         // isgroupChat: false,
         user: { $all: sortedUsers }
     });
-    // console.log('data',data);
     
 
-    // If no chat exists, create a new one
     if (!data) {
         console.log("inside data");
         
@@ -146,9 +70,13 @@ async function saveSimpleChat(req, res) {
             // isgroupChat: false,
             user: { $all: sortedUsers }
         });
+        console.log("save ho gyi simplechat vale user ki info");
+        
         res.send({ success: true, message: 'userchat',data:data._id });
     }
     else{
+        console.log("phele hi tha link");
+        
         res.send({success:true,data:data._id})
     }
 

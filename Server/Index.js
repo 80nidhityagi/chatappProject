@@ -8,6 +8,8 @@ const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
 
+require('dotenv').config();
+
 const app = express();
 
 // Middleware
@@ -16,26 +18,32 @@ app.use(express.json()); // Parse JSON request bodies
 
 connection();
 
-// Enable CORS for both REST API and Socket.IO
-app.use(cors({ origin: 'http://localhost:5173' }));
+// Enable CORS
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+app.use(cors({ origin: CLIENT_URL }));
 
-// Use routes with base paths
+// Routes
 app.use(user);
 app.use(chat);
 app.use(message);
-require('dotenv').config();
 
+// Static file serving for production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'frontend', 'build')));
 
-// Create HTTP server and initialize Socket.IO with CORS
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+  });
+}
+
+// Create HTTP server and initialize Socket.IO
 const server = http.createServer(app);
-
-// const { Server } = require('socket.io');
 
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:5173', // Replace with your React app's URL
-    methods: ['GET', 'POST'],       // Allowed HTTP methods
-    credentials: true,              // Include credentials if needed
+    origin: CLIENT_URL,
+    methods: ['GET', 'POST'],
+    credentials: true,
   },
 });
 
@@ -43,22 +51,19 @@ io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
   socket.on('join_chat', (roomId) => {
-    // const roomId = [senderId, receiverId].sort().join('_');
-    socket.join(roomId,'roomid');
+    socket.join(roomId);
     console.log(`User joined room: ${roomId}`);
   });
 
   socket.on('sendMessage', (messageData) => {
-    console.log(messageData.content,'content');    
-    const roomId = [ messageData.chat_id].sort().join('_');
-    io.to(roomId).emit('recevermesssge', messageData.content); // Emit message to room
-    // socket.emit('receiveMessage', messageData.content);
-
+    console.log(messageData.content, 'content');
+    const roomId = messageData.chat_id;
+    io.to(roomId).emit('recevermesssge', messageData.content);
     console.log('Message broadcasted to room:', roomId);
   });
 
-  socket.on('leave_chat', ({ senderId, chat_id }) => {
-    const roomId = [ chat_id].sort().join('_');
+  socket.on('leave_chat', ({ chat_id }) => {
+    const roomId = chat_id;
     socket.leave(roomId);
     console.log(`User left room: ${roomId}`);
   });
@@ -68,10 +73,9 @@ io.on('connection', (socket) => {
   });
 });
 
-
-
 // Start server
-server.listen(3000, (error) => {
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, (error) => {
   if (error) console.log('Error:', error);
-  else console.log('Server is started on port 3000');
+  else console.log(`Server is started on port ${PORT}`);
 });

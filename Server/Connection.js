@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
+require('dotenv').config();
+const mongoUri = process.env.MONGO_URI;
+
  const connect = async()=>{
     try {
-        await mongoose.connect('mongodb://127.0.0.1:27017/chatti');
+        await mongoose.connect(mongoUri);
         console.log("mongodb is connected");
     } catch (error) {
         console.log(error);
